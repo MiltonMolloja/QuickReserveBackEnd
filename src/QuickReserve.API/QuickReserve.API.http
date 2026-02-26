@@ -1,0 +1,6 @@
+@QuickReserve.API_HostAddress = http://localhost:5251
+
+GET {{QuickReserve.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
