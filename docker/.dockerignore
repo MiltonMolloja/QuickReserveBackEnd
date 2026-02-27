@@ -1,0 +1,16 @@
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/.idea
+**/bin
+**/obj
+**/node_modules
+**/.dockerignore
+**/docker-compose*
+**/*.md
+**/*.log
+**/coverage
+**/.sonarqube
+**/.scannerwork
+**/.opencode

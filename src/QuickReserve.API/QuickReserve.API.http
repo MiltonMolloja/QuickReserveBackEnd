@@ -1,6 +1,64 @@
-@QuickReserve.API_HostAddress = http://localhost:5251
+@baseUrl = http://localhost:5000/api
 
-GET {{QuickReserve.API_HostAddress}}/weatherforecast/
+### Health Check
+GET http://localhost:5000/health
 Accept: application/json
 
-###
+### Get All Workshops
+GET {{baseUrl}}/workshops
+Accept: application/json
+
+### Get All Appointments
+GET {{baseUrl}}/appointments
+Accept: application/json
+
+### Create Appointment - Valid (with vehicle)
+POST {{baseUrl}}/appointments
+Content-Type: application/json
+
+{
+  "place_id": 2222,
+  "appointment_at": "2026-12-01T10:00:00Z",
+  "service_type": "Mantenimiento",
+  "contact": {
+    "name": "Juan Perez",
+    "email": "juan@email.com",
+    "phone": "+5491155551234"
+  },
+  "vehicle": {
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "license_plate": "AB123CD"
+  }
+}
+
+### Create Appointment - Valid (without vehicle)
+POST {{baseUrl}}/appointments
+Content-Type: application/json
+
+{
+  "place_id": 2222,
+  "appointment_at": "2026-12-01T14:00:00Z",
+  "service_type": "Revision",
+  "contact": {
+    "name": "Maria Garcia",
+    "email": "maria@email.com",
+    "phone": "+5491166662222"
+  }
+}
+
+### Create Appointment - Invalid (validation errors)
+POST {{baseUrl}}/appointments
+Content-Type: application/json
+
+{
+  "place_id": 0,
+  "appointment_at": "2020-01-01T10:00:00Z",
+  "service_type": "",
+  "contact": {
+    "name": "",
+    "email": "invalid-email",
+    "phone": "123"
+  }
+}
