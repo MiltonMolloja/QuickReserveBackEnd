@@ -27,7 +27,13 @@
   <!-- Configuracion de documentacion XML -->
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!-- 1591: Missing XML comment, SA1633/SA1636: File header rules -->
-    <NoWarn>$(NoWarn);1591;SA1633;SA1636</NoWarn>
+    <!--
+      1591: Missing XML comment (compiler)
+      SA1600: Elements should be documented (StyleCop - redundant with 1591)
+      SA1633/SA1636: File header rules
+      SA1101: Prefix local calls with this (modern C# style: no this. prefix)
+      SA1309: Field should not begin with underscore (we use _camelCase convention)
+    -->
+    <NoWarn>$(NoWarn);1591;SA1600;SA1633;SA1636;SA1101;SA1309</NoWarn>
   </PropertyGroup>
 </Project>
