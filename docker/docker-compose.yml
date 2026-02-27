@@ -18,6 +18,8 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Redis=redis:6379
       - Serilog__WriteTo__1__Args__nodeUris=http://elasticsearch:9200
+      - TecnomApi__Username=${TECNOM_USERNAME}
+      - TecnomApi__Password=${TECNOM_PASSWORD}
     depends_on:
       - redis
       - elasticsearch

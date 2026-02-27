@@ -73,6 +73,10 @@ appsettings.Local.json
 Thumbs.db
 nul
 
+## Secrets / Environment
+.env
+*.env.local
+
 ## Logs
 logs/
 *.log

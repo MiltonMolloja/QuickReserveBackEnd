@@ -154,3 +154,18 @@ jobs:
 
       - name: Verify Docker image
         run: docker images quickreserve-api
+
+      - name: Smoke test Docker container
+        env:
+          TECNOM_USERNAME: ${{ secrets.TECNOM_USERNAME }}
+          TECNOM_PASSWORD: ${{ secrets.TECNOM_PASSWORD }}
+        run: |
+          docker run -d --name quickreserve-smoke \
+            -p 8080:8080 \
+            -e ASPNETCORE_ENVIRONMENT=Development \
+            -e TecnomApi__Username="${TECNOM_USERNAME}" \
+            -e TecnomApi__Password="${TECNOM_PASSWORD}" \
+            quickreserve-api:latest
+          sleep 5
+          curl -f http://localhost:8080/health || (docker logs quickreserve-smoke && exit 1)
+          docker stop quickreserve-smoke
