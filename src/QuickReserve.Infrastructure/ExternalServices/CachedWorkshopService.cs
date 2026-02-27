@@ -21,10 +21,10 @@ public sealed partial class CachedWorkshopService : IWorkshopService
 {
     private const string CacheKey = "workshops:active";
 
-    private readonly TecnomApiClient innerService;
-    private readonly IDistributedCache cache;
-    private readonly ILogger<CachedWorkshopService> logger;
-    private readonly TecnomApiSettings settings;
+    private readonly TecnomApiClient _innerService;
+    private readonly IDistributedCache _cache;
+    private readonly ILogger<CachedWorkshopService> _logger;
+    private readonly TecnomApiSettings _settings;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CachedWorkshopService"/> class.
@@ -39,10 +39,10 @@ public sealed partial class CachedWorkshopService : IWorkshopService
         IOptions<TecnomApiSettings> settings,
         ILogger<CachedWorkshopService> logger)
     {
-        this.innerService = innerService;
-        this.cache = cache;
-        this.settings = settings.Value;
-        this.logger = logger;
+        _innerService = innerService;
+        _cache = cache;
+        _settings = settings.Value;
+        _logger = logger;
     }
 
     /// <inheritdoc/>
@@ -58,42 +58,42 @@ public sealed partial class CachedWorkshopService : IWorkshopService
         // Try to get from cache (graceful fallback if cache is unavailable)
         try
         {
-            var cachedData = await cache.GetStringAsync(CacheKey, cancellationToken);
+            var cachedData = await _cache.GetStringAsync(CacheKey, cancellationToken);
 
             if (!string.IsNullOrEmpty(cachedData))
             {
-                logger.LogDebug("Workshops retrieved from cache");
+                _logger.LogDebug("Workshops retrieved from cache");
                 return JsonSerializer.Deserialize<List<WorkshopInfo>>(cachedData) ?? [];
             }
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Cache unavailable, falling back to API");
+            _logger.LogWarning(ex, "Cache unavailable, falling back to API");
         }
 
         // Cache miss or cache unavailable - fetch from API
-        logger.LogDebug("Fetching workshops from API");
-        var workshops = await innerService.GetActiveWorkshopsAsync(cancellationToken);
+        _logger.LogDebug("Fetching workshops from API");
+        var workshops = await _innerService.GetActiveWorkshopsAsync(cancellationToken);
 
         // Try to store in cache (best-effort, don't fail if cache is down)
         try
         {
             var cacheOptions = new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(settings.CacheExpirationMinutes),
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_settings.CacheExpirationMinutes),
             };
 
-            await cache.SetStringAsync(
+            await _cache.SetStringAsync(
                 CacheKey,
                 JsonSerializer.Serialize(workshops),
                 cacheOptions,
                 cancellationToken);
 
-            LogWorkshopsCached(logger, settings.CacheExpirationMinutes);
+            LogWorkshopsCached(_logger, _settings.CacheExpirationMinutes);
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Failed to store workshops in cache");
+            _logger.LogWarning(ex, "Failed to store workshops in cache");
         }
 
         return workshops;

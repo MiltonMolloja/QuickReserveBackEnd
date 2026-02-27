@@ -16,7 +16,7 @@ public sealed class CorrelationIdMiddleware
 {
     private const string CorrelationIdHeader = "X-Correlation-ID";
 
-    private readonly RequestDelegate next;
+    private readonly RequestDelegate _next;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CorrelationIdMiddleware"/> class.
@@ -24,7 +24,7 @@ public sealed class CorrelationIdMiddleware
     /// <param name="next">The next middleware in the pipeline.</param>
     public CorrelationIdMiddleware(RequestDelegate next)
     {
-        this.next = next;
+        _next = next;
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public sealed class CorrelationIdMiddleware
 
         using (LogContext.PushProperty("CorrelationId", correlationId))
         {
-            await next(context);
+            await _next(context);
         }
     }
 }

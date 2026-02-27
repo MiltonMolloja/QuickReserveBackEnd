@@ -15,7 +15,7 @@ using QuickReserve.Domain.Interfaces;
 /// </summary>
 public sealed class AppointmentRepository : IAppointmentRepository
 {
-    private readonly AppDbContext context;
+    private readonly AppDbContext _context;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AppointmentRepository"/> class.
@@ -23,20 +23,20 @@ public sealed class AppointmentRepository : IAppointmentRepository
     /// <param name="context">The database context.</param>
     public AppointmentRepository(AppDbContext context)
     {
-        this.context = context;
+        _context = context;
     }
 
     /// <inheritdoc/>
     public async Task<Appointment?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.Appointments
+        return await _context.Appointments
             .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
     public async Task<IReadOnlyList<Appointment>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await context.Appointments
+        return await _context.Appointments
             .OrderByDescending(a => a.CreatedAt)
             .ToListAsync(cancellationToken);
     }
@@ -44,8 +44,8 @@ public sealed class AppointmentRepository : IAppointmentRepository
     /// <inheritdoc/>
     public async Task<Appointment> AddAsync(Appointment appointment, CancellationToken cancellationToken = default)
     {
-        await context.Appointments.AddAsync(appointment, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
+        await _context.Appointments.AddAsync(appointment, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
         return appointment;
     }
 }

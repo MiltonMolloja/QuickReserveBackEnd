@@ -21,8 +21,8 @@ using QuickReserve.Infrastructure.ExternalServices.Models;
 /// </summary>
 public sealed partial class TecnomApiClient : IWorkshopService
 {
-    private readonly HttpClient httpClient;
-    private readonly ILogger<TecnomApiClient> logger;
+    private readonly HttpClient _httpClient;
+    private readonly ILogger<TecnomApiClient> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TecnomApiClient"/> class.
@@ -35,20 +35,20 @@ public sealed partial class TecnomApiClient : IWorkshopService
         IOptions<TecnomApiSettings> settings,
         ILogger<TecnomApiClient> logger)
     {
-        this.httpClient = httpClient;
-        this.logger = logger;
+        _httpClient = httpClient;
+        _logger = logger;
 
         // Configure Basic Auth
         var credentials = Convert.ToBase64String(
             Encoding.ASCII.GetBytes($"{settings.Value.Username}:{settings.Value.Password}"));
-        this.httpClient.DefaultRequestHeaders.Authorization =
+        _httpClient.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Basic", credentials);
     }
 
     /// <inheritdoc/>
     public async Task<bool> IsActiveWorkshopAsync(int placeId, CancellationToken cancellationToken = default)
     {
-        LogCheckingWorkshop(logger, placeId);
+        LogCheckingWorkshop(_logger, placeId);
 
         var workshops = await GetActiveWorkshopsAsync(cancellationToken);
         return workshops.Any(w => w.Id == placeId);
@@ -57,9 +57,9 @@ public sealed partial class TecnomApiClient : IWorkshopService
     /// <inheritdoc/>
     public async Task<IReadOnlyList<WorkshopInfo>> GetActiveWorkshopsAsync(CancellationToken cancellationToken = default)
     {
-        LogFetchingWorkshops(logger);
+        LogFetchingWorkshops(_logger);
 
-        var response = await httpClient.GetAsync("places/workshops", cancellationToken);
+        var response = await _httpClient.GetAsync("places/workshops", cancellationToken);
         response.EnsureSuccessStatusCode();
 
         var workshops = await response.Content.ReadFromJsonAsync<List<TecnomWorkshopDto>>(cancellationToken)
@@ -70,7 +70,7 @@ public sealed partial class TecnomApiClient : IWorkshopService
             .Select(w => new WorkshopInfo(w.Id, w.Name, w.Address, w.Email, w.Whatsapp))
             .ToList();
 
-        LogRetrievedWorkshops(logger, activeWorkshops.Count);
+        LogRetrievedWorkshops(_logger, activeWorkshops.Count);
 
         return activeWorkshops;
     }

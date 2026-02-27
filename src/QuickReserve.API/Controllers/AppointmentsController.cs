@@ -21,8 +21,8 @@ using QuickReserve.Application.Features.Appointments.Queries;
 [Produces("application/json")]
 public sealed partial class AppointmentsController : ControllerBase
 {
-    private readonly IMediator mediator;
-    private readonly ILogger<AppointmentsController> logger;
+    private readonly IMediator _mediator;
+    private readonly ILogger<AppointmentsController> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AppointmentsController"/> class.
@@ -31,8 +31,8 @@ public sealed partial class AppointmentsController : ControllerBase
     /// <param name="logger">The logger.</param>
     public AppointmentsController(IMediator mediator, ILogger<AppointmentsController> logger)
     {
-        this.mediator = mediator;
-        this.logger = logger;
+        _mediator = mediator;
+        _logger = logger;
     }
 
     /// <summary>
@@ -45,9 +45,9 @@ public sealed partial class AppointmentsController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<AppointmentResponse>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        LogGetAllAppointments(logger);
+        LogGetAllAppointments(_logger);
 
-        var result = await mediator.Send(new GetAllAppointmentsQuery(), cancellationToken);
+        var result = await _mediator.Send(new GetAllAppointmentsQuery(), cancellationToken);
         return Ok(result);
     }
 
@@ -66,9 +66,9 @@ public sealed partial class AppointmentsController : ControllerBase
         [FromBody] CreateAppointmentRequest request,
         CancellationToken cancellationToken)
     {
-        LogCreateAppointment(logger, request.PlaceId);
+        LogCreateAppointment(_logger, request.PlaceId);
 
-        var result = await mediator.Send(new CreateAppointmentCommand(request), cancellationToken);
+        var result = await _mediator.Send(new CreateAppointmentCommand(request), cancellationToken);
 
         return !result.Success
             ? BadRequest(result)

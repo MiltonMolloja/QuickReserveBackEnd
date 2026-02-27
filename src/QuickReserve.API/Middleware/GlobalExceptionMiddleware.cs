@@ -22,8 +22,8 @@ public sealed class GlobalExceptionMiddleware
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
     };
 
-    private readonly RequestDelegate next;
-    private readonly ILogger<GlobalExceptionMiddleware> logger;
+    private readonly RequestDelegate _next;
+    private readonly ILogger<GlobalExceptionMiddleware> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GlobalExceptionMiddleware"/> class.
@@ -32,8 +32,8 @@ public sealed class GlobalExceptionMiddleware
     /// <param name="logger">The logger.</param>
     public GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger)
     {
-        this.next = next;
-        this.logger = logger;
+        _next = next;
+        _logger = logger;
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public sealed class GlobalExceptionMiddleware
     {
         try
         {
-            await next(context);
+            await _next(context);
         }
         catch (Exception ex)
         {
@@ -64,7 +64,7 @@ public sealed class GlobalExceptionMiddleware
             _ => (HttpStatusCode.InternalServerError, "Ha ocurrido un error interno."),
         };
 
-        logger.LogError(exception, "Exception caught: {Message}", exception.Message);
+        _logger.LogError(exception, "Exception caught: {Message}", exception.Message);
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;

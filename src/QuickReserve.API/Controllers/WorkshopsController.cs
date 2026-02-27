@@ -19,8 +19,8 @@ using QuickReserve.Application.Features.Workshops.Queries;
 [Produces("application/json")]
 public sealed class WorkshopsController : ControllerBase
 {
-    private readonly IMediator mediator;
-    private readonly ILogger<WorkshopsController> logger;
+    private readonly IMediator _mediator;
+    private readonly ILogger<WorkshopsController> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WorkshopsController"/> class.
@@ -29,8 +29,8 @@ public sealed class WorkshopsController : ControllerBase
     /// <param name="logger">The logger.</param>
     public WorkshopsController(IMediator mediator, ILogger<WorkshopsController> logger)
     {
-        this.mediator = mediator;
-        this.logger = logger;
+        _mediator = mediator;
+        _logger = logger;
     }
 
     /// <summary>
@@ -45,9 +45,9 @@ public sealed class WorkshopsController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<WorkshopResponse>>), StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        logger.LogInformation("GET /api/workshops");
+        _logger.LogInformation("GET /api/workshops");
 
-        var result = await mediator.Send(new GetAllWorkshopsQuery(), cancellationToken);
+        var result = await _mediator.Send(new GetAllWorkshopsQuery(), cancellationToken);
 
         return !result.Success
             ? StatusCode(StatusCodes.Status503ServiceUnavailable, result)
