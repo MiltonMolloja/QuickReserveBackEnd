@@ -70,11 +70,8 @@ public sealed class AppointmentsController : ControllerBase
 
         var result = await mediator.Send(new CreateAppointmentCommand(request), cancellationToken);
 
-        if (!result.Success)
-        {
-            return BadRequest(result);
-        }
-
-        return CreatedAtAction(nameof(GetAll), result);
+        return !result.Success
+            ? BadRequest(result)
+            : CreatedAtAction(nameof(GetAll), result);
     }
 }

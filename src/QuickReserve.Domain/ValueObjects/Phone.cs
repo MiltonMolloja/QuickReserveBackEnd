@@ -47,12 +47,9 @@ public sealed partial class Phone : IEquatable<Phone>
 
         var cleanedPhone = CleanPhoneNumber(phone);
 
-        if (!PhonePattern.IsMatch(cleanedPhone))
-        {
-            throw new InvalidPhoneException($"El formato del telefono '{phone}' no es valido.");
-        }
-
-        return new Phone(cleanedPhone);
+        return !PhonePattern.IsMatch(cleanedPhone)
+            ? throw new InvalidPhoneException($"El formato del telefono '{phone}' no es valido.")
+            : new Phone(cleanedPhone);
     }
 
     /// <inheritdoc/>
@@ -68,7 +65,10 @@ public sealed partial class Phone : IEquatable<Phone>
     public override string ToString() => Value;
 
     private static string CleanPhoneNumber(string phone) =>
-        Regex.Replace(phone, @"[\s\-\(\)]", string.Empty);
+        CleanPhoneRegex().Replace(phone, string.Empty);
+
+    [GeneratedRegex(@"[\s\-\(\)]")]
+    private static partial Regex CleanPhoneRegex();
 
     [GeneratedRegex(@"^\+?[1-9]\d{6,14}$", RegexOptions.Compiled)]
     private static partial Regex GeneratedPhoneRegex();

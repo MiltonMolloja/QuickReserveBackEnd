@@ -36,9 +36,7 @@ public sealed class CreateAppointmentValidator : AbstractValidator<CreateAppoint
             .SetValidator(new ContactRequestValidator());
 
         When(x => x.Vehicle is not null, () =>
-        {
             RuleFor(x => x.Vehicle!)
-                .SetValidator(new VehicleRequestValidator());
-        });
+                .SetValidator(new VehicleRequestValidator()));
     }
 }

@@ -15,12 +15,11 @@ public class ArchitectureTests
     /// Placeholder test - will be implemented with actual architecture tests.
     /// </summary>
     [Fact]
-    public void Architecture_ShouldFollowCleanArchitectureRules()
-    {
+    public void Architecture_ShouldFollowCleanArchitectureRules() =>
+
         // TODO: Implement architecture tests using NetArchTest
         // - Domain should not depend on Application, Infrastructure, or API
         // - Application should not depend on Infrastructure or API
         // - Infrastructure should not depend on API
         Assert.True(true);
-    }
 }

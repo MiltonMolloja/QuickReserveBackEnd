@@ -57,18 +57,15 @@ public sealed class Vehicle
     /// <returns>A new <see cref="Vehicle"/> instance, or null if all fields are empty.</returns>
     public static Vehicle? Create(string? make, string? model, int? year, string? licensePlate)
     {
-        if (string.IsNullOrWhiteSpace(make) &&
+        return string.IsNullOrWhiteSpace(make) &&
             string.IsNullOrWhiteSpace(model) &&
             !year.HasValue &&
-            string.IsNullOrWhiteSpace(licensePlate))
-        {
-            return null;
-        }
-
-        return new Vehicle(
-            make?.Trim(),
-            model?.Trim(),
-            year,
-            LicensePlate.Create(licensePlate));
+            string.IsNullOrWhiteSpace(licensePlate)
+            ? null
+            : new Vehicle(
+                make?.Trim(),
+                model?.Trim(),
+                year,
+                LicensePlate.Create(licensePlate));
     }
 }

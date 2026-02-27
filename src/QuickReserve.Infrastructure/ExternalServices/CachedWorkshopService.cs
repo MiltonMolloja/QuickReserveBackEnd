@@ -21,7 +21,7 @@ public sealed class CachedWorkshopService : IWorkshopService
 {
     private const string CacheKey = "workshops:active";
 
-    private readonly IWorkshopService innerService;
+    private readonly TecnomApiClient innerService;
     private readonly IDistributedCache cache;
     private readonly ILogger<CachedWorkshopService> logger;
     private readonly TecnomApiSettings settings;
@@ -55,32 +55,46 @@ public sealed class CachedWorkshopService : IWorkshopService
     /// <inheritdoc/>
     public async Task<IReadOnlyList<WorkshopInfo>> GetActiveWorkshopsAsync(CancellationToken cancellationToken = default)
     {
-        // Try to get from cache
-        var cachedData = await cache.GetStringAsync(CacheKey, cancellationToken);
-
-        if (!string.IsNullOrEmpty(cachedData))
+        // Try to get from cache (graceful fallback if cache is unavailable)
+        try
         {
-            logger.LogDebug("Workshops retrieved from cache");
-            return JsonSerializer.Deserialize<List<WorkshopInfo>>(cachedData) ?? [];
+            var cachedData = await cache.GetStringAsync(CacheKey, cancellationToken);
+
+            if (!string.IsNullOrEmpty(cachedData))
+            {
+                logger.LogDebug("Workshops retrieved from cache");
+                return JsonSerializer.Deserialize<List<WorkshopInfo>>(cachedData) ?? [];
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Cache unavailable, falling back to API");
         }
 
-        // Cache miss - fetch from API
-        logger.LogDebug("Cache miss, fetching workshops from API");
+        // Cache miss or cache unavailable - fetch from API
+        logger.LogDebug("Fetching workshops from API");
         var workshops = await innerService.GetActiveWorkshopsAsync(cancellationToken);
 
-        // Store in cache
-        var cacheOptions = new DistributedCacheEntryOptions
+        // Try to store in cache (best-effort, don't fail if cache is down)
+        try
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(settings.CacheExpirationMinutes),
-        };
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(settings.CacheExpirationMinutes),
+            };
 
-        await cache.SetStringAsync(
-            CacheKey,
-            JsonSerializer.Serialize(workshops),
-            cacheOptions,
-            cancellationToken);
+            await cache.SetStringAsync(
+                CacheKey,
+                JsonSerializer.Serialize(workshops),
+                cacheOptions,
+                cancellationToken);
 
-        logger.LogDebug("Workshops cached for {Minutes} minutes", settings.CacheExpirationMinutes);
+            logger.LogDebug("Workshops cached for {Minutes} minutes", settings.CacheExpirationMinutes);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Failed to store workshops in cache");
+        }
 
         return workshops;
     }

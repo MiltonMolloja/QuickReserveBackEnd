@@ -49,13 +49,10 @@ public sealed partial class LicensePlate : IEquatable<LicensePlate>
 
         var upperPlate = licensePlate.Trim().ToUpperInvariant();
 
-        if (!LicensePlatePattern.IsMatch(upperPlate))
-        {
-            throw new InvalidLicensePlateException(
-                $"El formato de la patente '{licensePlate}' no es valido. Use formato ABC123 o AB123CD.");
-        }
-
-        return new LicensePlate(upperPlate);
+        return !LicensePlatePattern.IsMatch(upperPlate)
+            ? throw new InvalidLicensePlateException(
+                $"El formato de la patente '{licensePlate}' no es valido. Use formato ABC123 o AB123CD.")
+            : new LicensePlate(upperPlate);
     }
 
     /// <inheritdoc/>

@@ -40,7 +40,6 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
         // Override configuration to avoid connecting to real services
         builder.ConfigureAppConfiguration((context, config) =>
-        {
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["ConnectionStrings:Redis"] = string.Empty,
@@ -51,8 +50,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 ["TecnomApi:CacheExpirationMinutes"] = "5",
                 ["TecnomApi:TimeoutSeconds"] = "10",
                 ["TecnomApi:RetryCount"] = "1",
-            });
-        });
+            }));
 
         builder.ConfigureServices(services =>
         {

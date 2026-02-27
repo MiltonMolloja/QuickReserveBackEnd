@@ -191,10 +191,7 @@ public sealed class AppointmentRepositoryTests : IDisposable
         persisted!.Vehicle.Should().BeNull();
     }
 
-    public void Dispose()
-    {
-        context.Dispose();
-    }
+    public void Dispose() => context.Dispose();
 
     private static Appointment CreateTestAppointment()
     {

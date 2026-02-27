@@ -44,11 +44,8 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
             .Where(f => f is not null)
             .ToList();
 
-        if (failures.Count != 0)
-        {
-            throw new ValidationException(failures);
-        }
-
-        return await next(cancellationToken);
+        return failures.Count != 0
+            ? throw new ValidationException(failures)
+            : await next(cancellationToken);
     }
 }

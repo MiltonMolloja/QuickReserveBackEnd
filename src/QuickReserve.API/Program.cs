@@ -46,9 +46,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
 // -----------------------------------------------------------------------
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseLower;
-    });
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseLower);
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -77,16 +75,12 @@ builder.Services.AddSwaggerGen(options =>
 
 // CORS for Angular frontend
 builder.Services.AddCors(options =>
-{
     options.AddPolicy("AllowAngular", policy =>
-    {
         policy
             .WithOrigins("http://localhost:4200", "https://localhost:4200")
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .AllowCredentials();
-    });
-});
+            .AllowCredentials()));
 
 // Health Checks
 var healthChecks = builder.Services.AddHealthChecks();
@@ -121,13 +115,11 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Serilog request logging
 app.UseSerilogRequestLogging(options =>
-{
     options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
     {
         diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
         diagnosticContext.Set("UserAgent", httpContext.Request.Headers.UserAgent.ToString());
-    };
-});
+    });
 
 if (app.Environment.IsDevelopment())
 {
@@ -135,7 +127,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuickReserve API v1");
-        c.RoutePrefix = string.Empty; // Swagger at root
+        c.RoutePrefix = string.Empty;
     });
 }
 

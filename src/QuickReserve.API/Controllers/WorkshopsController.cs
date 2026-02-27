@@ -49,11 +49,8 @@ public sealed class WorkshopsController : ControllerBase
 
         var result = await mediator.Send(new GetAllWorkshopsQuery(), cancellationToken);
 
-        if (!result.Success)
-        {
-            return StatusCode(StatusCodes.Status503ServiceUnavailable, result);
-        }
-
-        return Ok(result);
+        return !result.Success
+            ? StatusCode(StatusCodes.Status503ServiceUnavailable, result)
+            : Ok(result);
     }
 }

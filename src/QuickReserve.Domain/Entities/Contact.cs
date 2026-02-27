@@ -54,14 +54,11 @@ public sealed class Contact
     /// <exception cref="DomainException">Thrown when the name is empty.</exception>
     public static Contact Create(string name, string email, string phone)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new DomainException("El nombre del contacto no puede estar vacio.");
-        }
-
-        return new Contact(
-            name.Trim(),
-            Email.Create(email),
-            Phone.Create(phone));
+        return string.IsNullOrWhiteSpace(name)
+            ? throw new DomainException("El nombre del contacto no puede estar vacio.")
+            : new Contact(
+                name.Trim(),
+                Email.Create(email),
+                Phone.Create(phone));
     }
 }

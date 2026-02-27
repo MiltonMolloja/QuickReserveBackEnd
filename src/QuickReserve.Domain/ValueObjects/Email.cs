@@ -47,12 +47,9 @@ public sealed partial class Email : IEquatable<Email>
 
         var trimmedEmail = email.Trim().ToLowerInvariant();
 
-        if (!EmailPattern.IsMatch(trimmedEmail))
-        {
-            throw new InvalidEmailException($"El formato del email '{email}' no es valido.");
-        }
-
-        return new Email(trimmedEmail);
+        return !EmailPattern.IsMatch(trimmedEmail)
+            ? throw new InvalidEmailException($"El formato del email '{email}' no es valido.")
+            : new Email(trimmedEmail);
     }
 
     /// <inheritdoc/>
