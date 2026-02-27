@@ -142,18 +142,3 @@ app.MapHealthChecks("/health", new HealthCheckOptions
 });
 
 await app.RunAsync();
-
-// -----------------------------------------------------------------------
-// Partial class for integration tests (WebApplicationFactory)
-// -----------------------------------------------------------------------
-#pragma warning disable CA1050 // Declare types in namespaces
-#pragma warning disable S1118 // Utility classes should not have public constructors
-
-/// <summary>
-/// Entry point for the QuickReserve API. Partial class to enable WebApplicationFactory in integration tests.
-/// </summary>
-public partial class Program
-{
-}
-#pragma warning restore S1118 // Utility classes should not have public constructors
-#pragma warning restore CA1050 // Declare types in namespaces

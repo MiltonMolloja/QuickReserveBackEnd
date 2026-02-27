@@ -15,7 +15,7 @@ using QuickReserve.Domain.Interfaces;
 /// <summary>
 /// Handler for <see cref="GetAllAppointmentsQuery"/>.
 /// </summary>
-public sealed class GetAllAppointmentsHandler
+public sealed partial class GetAllAppointmentsHandler
     : IRequestHandler<GetAllAppointmentsQuery, ApiResponse<IReadOnlyList<AppointmentResponse>>>
 {
     private readonly IAppointmentRepository _appointmentRepository;
@@ -33,13 +33,19 @@ public sealed class GetAllAppointmentsHandler
         GetAllAppointmentsQuery request,
         CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Getting all appointments");
+        LogGettingAllAppointments(_logger);
 
         var appointments = await _appointmentRepository.GetAllAsync(cancellationToken);
         var response = appointments.Adapt<IReadOnlyList<AppointmentResponse>>();
 
-        _logger.LogInformation("Retrieved {Count} appointments", appointments.Count);
+        LogRetrievedAppointments(_logger, appointments.Count);
 
         return ApiResponse<IReadOnlyList<AppointmentResponse>>.Ok(response);
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Getting all appointments")]
+    private static partial void LogGettingAllAppointments(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Retrieved {Count} appointments")]
+    private static partial void LogRetrievedAppointments(ILogger logger, int count);
 }

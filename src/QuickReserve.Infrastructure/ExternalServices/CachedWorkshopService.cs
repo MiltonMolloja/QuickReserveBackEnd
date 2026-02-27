@@ -17,7 +17,7 @@ using QuickReserve.Infrastructure.Configuration;
 /// Decorator that adds distributed caching (Redis/Memory) on top of
 /// <see cref="TecnomApiClient"/> for workshop data.
 /// </summary>
-public sealed class CachedWorkshopService : IWorkshopService
+public sealed partial class CachedWorkshopService : IWorkshopService
 {
     private const string CacheKey = "workshops:active";
 
@@ -89,7 +89,7 @@ public sealed class CachedWorkshopService : IWorkshopService
                 cacheOptions,
                 cancellationToken);
 
-            logger.LogDebug("Workshops cached for {Minutes} minutes", settings.CacheExpirationMinutes);
+            LogWorkshopsCached(logger, settings.CacheExpirationMinutes);
         }
         catch (Exception ex)
         {
@@ -98,4 +98,7 @@ public sealed class CachedWorkshopService : IWorkshopService
 
         return workshops;
     }
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Workshops cached for {Minutes} minutes")]
+    private static partial void LogWorkshopsCached(ILogger logger, int minutes);
 }

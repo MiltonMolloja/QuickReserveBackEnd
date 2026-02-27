@@ -15,7 +15,7 @@ using QuickReserve.Domain.Interfaces;
 /// <summary>
 /// Handler for <see cref="GetAllWorkshopsQuery"/>.
 /// </summary>
-public sealed class GetAllWorkshopsHandler
+public sealed partial class GetAllWorkshopsHandler
     : IRequestHandler<GetAllWorkshopsQuery, ApiResponse<IReadOnlyList<WorkshopResponse>>>
 {
     private readonly IWorkshopService _workshopService;
@@ -33,14 +33,14 @@ public sealed class GetAllWorkshopsHandler
         GetAllWorkshopsQuery request,
         CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Getting all active workshops");
+        LogGettingAllWorkshops(_logger);
 
         try
         {
             var workshops = await _workshopService.GetActiveWorkshopsAsync(cancellationToken);
             var response = workshops.Adapt<IReadOnlyList<WorkshopResponse>>();
 
-            _logger.LogInformation("Retrieved {Count} active workshops", workshops.Count);
+            LogRetrievedWorkshops(_logger, workshops.Count);
 
             return ApiResponse<IReadOnlyList<WorkshopResponse>>.Ok(response);
         }
@@ -51,4 +51,10 @@ public sealed class GetAllWorkshopsHandler
                 "Error al obtener los talleres. Intente nuevamente.");
         }
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Getting all active workshops")]
+    private static partial void LogGettingAllWorkshops(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Retrieved {Count} active workshops")]
+    private static partial void LogRetrievedWorkshops(ILogger logger, int count);
 }

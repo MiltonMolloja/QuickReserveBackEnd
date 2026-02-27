@@ -19,7 +19,7 @@ using QuickReserve.Domain.Services;
 /// Handler for <see cref="CreateAppointmentCommand"/>.
 /// Validates the request, creates the appointment via domain service, and persists it.
 /// </summary>
-public sealed class CreateAppointmentHandler
+public sealed partial class CreateAppointmentHandler
     : IRequestHandler<CreateAppointmentCommand, ApiResponse<AppointmentResponse>>
 {
     private readonly IAppointmentRepository _appointmentRepository;
@@ -45,7 +45,7 @@ public sealed class CreateAppointmentHandler
     {
         var request = command.Request;
 
-        _logger.LogInformation("Creating appointment for place {PlaceId}", request.PlaceId);
+        LogCreatingAppointment(_logger, request.PlaceId);
 
         // Validate request
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -76,7 +76,7 @@ public sealed class CreateAppointmentHandler
             // Persist
             await _appointmentRepository.AddAsync(appointment, cancellationToken);
 
-            _logger.LogInformation("Appointment {AppointmentId} created successfully", appointment.Id);
+            LogAppointmentCreated(_logger, appointment.Id);
 
             // Map to response
             var response = appointment.Adapt<AppointmentResponse>();
@@ -88,4 +88,10 @@ public sealed class CreateAppointmentHandler
             return ApiResponse<AppointmentResponse>.Fail(ex.Message);
         }
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Creating appointment for place {PlaceId}")]
+    private static partial void LogCreatingAppointment(ILogger logger, int placeId);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Appointment {AppointmentId} created successfully")]
+    private static partial void LogAppointmentCreated(ILogger logger, Guid appointmentId);
 }

@@ -19,7 +19,7 @@ using QuickReserve.Infrastructure.ExternalServices.Models;
 /// HTTP client for the Tecnom CRM API. Implements <see cref="IWorkshopService"/>
 /// to fetch workshop data from the external service.
 /// </summary>
-public sealed class TecnomApiClient : IWorkshopService
+public sealed partial class TecnomApiClient : IWorkshopService
 {
     private readonly HttpClient httpClient;
     private readonly ILogger<TecnomApiClient> logger;
@@ -48,7 +48,7 @@ public sealed class TecnomApiClient : IWorkshopService
     /// <inheritdoc/>
     public async Task<bool> IsActiveWorkshopAsync(int placeId, CancellationToken cancellationToken = default)
     {
-        logger.LogDebug("Checking if workshop {PlaceId} is active", placeId);
+        LogCheckingWorkshop(logger, placeId);
 
         var workshops = await GetActiveWorkshopsAsync(cancellationToken);
         return workshops.Any(w => w.Id == placeId);
@@ -57,7 +57,7 @@ public sealed class TecnomApiClient : IWorkshopService
     /// <inheritdoc/>
     public async Task<IReadOnlyList<WorkshopInfo>> GetActiveWorkshopsAsync(CancellationToken cancellationToken = default)
     {
-        logger.LogDebug("Fetching workshops from Tecnom API");
+        LogFetchingWorkshops(logger);
 
         var response = await httpClient.GetAsync("places/workshops", cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -70,8 +70,17 @@ public sealed class TecnomApiClient : IWorkshopService
             .Select(w => new WorkshopInfo(w.Id, w.Name, w.Address, w.Email, w.Whatsapp))
             .ToList();
 
-        logger.LogDebug("Retrieved {Count} active workshops", activeWorkshops.Count);
+        LogRetrievedWorkshops(logger, activeWorkshops.Count);
 
         return activeWorkshops;
     }
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Checking if workshop {PlaceId} is active")]
+    private static partial void LogCheckingWorkshop(ILogger logger, int placeId);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Fetching workshops from Tecnom API")]
+    private static partial void LogFetchingWorkshops(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Retrieved {Count} active workshops")]
+    private static partial void LogRetrievedWorkshops(ILogger logger, int count);
 }

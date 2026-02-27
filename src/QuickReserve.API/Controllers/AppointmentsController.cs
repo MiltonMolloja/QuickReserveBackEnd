@@ -19,7 +19,7 @@ using QuickReserve.Application.Features.Appointments.Queries;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
-public sealed class AppointmentsController : ControllerBase
+public sealed partial class AppointmentsController : ControllerBase
 {
     private readonly IMediator mediator;
     private readonly ILogger<AppointmentsController> logger;
@@ -45,7 +45,7 @@ public sealed class AppointmentsController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<AppointmentResponse>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        logger.LogInformation("GET /api/appointments");
+        LogGetAllAppointments(logger);
 
         var result = await mediator.Send(new GetAllAppointmentsQuery(), cancellationToken);
         return Ok(result);
@@ -66,7 +66,7 @@ public sealed class AppointmentsController : ControllerBase
         [FromBody] CreateAppointmentRequest request,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("POST /api/appointments for place {PlaceId}", request.PlaceId);
+        LogCreateAppointment(logger, request.PlaceId);
 
         var result = await mediator.Send(new CreateAppointmentCommand(request), cancellationToken);
 
@@ -74,4 +74,10 @@ public sealed class AppointmentsController : ControllerBase
             ? BadRequest(result)
             : CreatedAtAction(nameof(GetAll), result);
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "GET /api/appointments")]
+    private static partial void LogGetAllAppointments(ILogger logger);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "POST /api/appointments for place {PlaceId}")]
+    private static partial void LogCreateAppointment(ILogger logger, int placeId);
 }
