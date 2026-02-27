@@ -58,7 +58,7 @@ public static class DependencyInjection
             options.Retry.Delay = TimeSpan.FromSeconds(2);
 
             options.CircuitBreaker.FailureRatio = 0.5;
-            options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(30);
+            options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(tecnomSettings.TimeoutSeconds * 2);
             options.CircuitBreaker.MinimumThroughput = 5;
             options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
 
