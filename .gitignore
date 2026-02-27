@@ -71,10 +71,14 @@ appsettings.Local.json
 ## OS
 .DS_Store
 Thumbs.db
+nul
 
 ## Logs
 logs/
 *.log
+
+## Coverage
+coverage/
 
 ## Sonar
 .sonarqube/
