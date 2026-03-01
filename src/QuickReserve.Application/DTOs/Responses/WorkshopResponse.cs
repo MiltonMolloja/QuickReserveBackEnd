@@ -19,5 +19,5 @@ public sealed record WorkshopResponse
 
     public string? Email { get; init; }
 
-    public string? Whatsapp { get; init; }
+    public string? Phone { get; init; }
 }

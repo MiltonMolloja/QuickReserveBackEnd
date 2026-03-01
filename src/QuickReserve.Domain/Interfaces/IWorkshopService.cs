@@ -34,10 +34,10 @@ public interface IWorkshopService
 /// <param name="Name">The workshop name.</param>
 /// <param name="Address">The workshop address.</param>
 /// <param name="Email">The workshop email.</param>
-/// <param name="Whatsapp">The workshop WhatsApp number.</param>
+/// <param name="Phone">The workshop phone number.</param>
 public sealed record WorkshopInfo(
     int Id,
     string Name,
     string? Address,
     string? Email,
-    string? Whatsapp);
+    string? Phone);

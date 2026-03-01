@@ -67,7 +67,7 @@ public sealed class TecnomApiClientTests
                 Active = true,
                 Address = "Av. Corrientes 1234",
                 Email = "taller@test.com",
-                Whatsapp = "+5491155551234",
+                Phone = "+5491155551234",
             },
         };
 
@@ -83,7 +83,7 @@ public sealed class TecnomApiClientTests
         workshop.Name.Should().Be("Taller Central");
         workshop.Address.Should().Be("Av. Corrientes 1234");
         workshop.Email.Should().Be("taller@test.com");
-        workshop.Whatsapp.Should().Be("+5491155551234");
+        workshop.Phone.Should().Be("+5491155551234");
     }
 
     [Fact]

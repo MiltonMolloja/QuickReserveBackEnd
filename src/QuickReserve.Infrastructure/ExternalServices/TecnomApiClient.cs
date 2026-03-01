@@ -9,6 +9,7 @@ namespace QuickReserve.Infrastructure.ExternalServices;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using QuickReserve.Domain.Interfaces;
@@ -67,12 +68,36 @@ public sealed partial class TecnomApiClient : IWorkshopService
 
         var activeWorkshops = workshops
             .Where(w => w.Active)
-            .Select(w => new WorkshopInfo(w.Id, w.Name, w.Address, w.Email, w.Whatsapp))
+            .Select(w => new WorkshopInfo(w.Id, w.Name, ParseFormattedAddress(w.Address), w.Email, w.Phone))
             .ToList();
 
         LogRetrievedWorkshops(_logger, activeWorkshops.Count);
 
         return activeWorkshops;
+    }
+
+    /// <summary>
+    /// Extracts the formatted address from a Google Places JSON string.
+    /// Returns the raw value if parsing fails.
+    /// </summary>
+    private static string? ParseFormattedAddress(string? addressJson)
+    {
+        if (string.IsNullOrEmpty(addressJson))
+        {
+            return null;
+        }
+
+        try
+        {
+            using var doc = JsonDocument.Parse(addressJson);
+            return doc.RootElement.TryGetProperty("formatted_address", out var formatted)
+                ? formatted.GetString()
+                : addressJson;
+        }
+        catch (JsonException)
+        {
+            return addressJson;
+        }
     }
 
     [LoggerMessage(Level = LogLevel.Debug, Message = "Checking if workshop {PlaceId} is active")]
