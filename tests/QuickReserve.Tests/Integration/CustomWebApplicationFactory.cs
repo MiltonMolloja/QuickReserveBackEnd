@@ -28,7 +28,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
     /// </summary>
     public List<TecnomWorkshopDto> MockWorkshops { get; } =
     [
-        new() { Id = 1, Name = "Taller Central", Active = true, Address = "Av. Corrientes 1234", Email = "central@test.com", Phone = "+5491155551234" },
+        new() { Id = 1, Name = "Taller Central", Active = true, Address = "Av. Corrientes 1234", Email = "central@test.com", Whatsapp = "+5491155551234" },
         new() { Id = 2, Name = "Taller Norte", Active = true, Address = "Av. Cabildo 5678" },
         new() { Id = 3, Name = "Taller Inactivo", Active = false, Address = "Calle Falsa 123" },
     ];
@@ -87,7 +87,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
         {
             var active = workshops
                 .Where(w => w.Active)
-                .Select(w => new WorkshopInfo(w.Id, w.Name, w.Address, w.Email, w.Phone))
+                .Select(w => new WorkshopInfo(w.Id, w.Name, w.Address, w.Email, w.Whatsapp))
                 .ToList();
 
             return Task.FromResult<IReadOnlyList<WorkshopInfo>>(active);

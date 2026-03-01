@@ -52,7 +52,7 @@ public class CreateAppointmentHandlerTests
         {
             Name = "Juan Perez",
             Email = "juan@email.com",
-            Phone = "+5491155551234",
+            Whatsapp = "+5491155551234",
         },
     };
 

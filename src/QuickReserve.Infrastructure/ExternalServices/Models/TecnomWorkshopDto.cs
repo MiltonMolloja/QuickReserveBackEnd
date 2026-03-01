@@ -38,10 +38,10 @@ public sealed record TecnomWorkshopDto
     public string? Email { get; init; }
 
     /// <summary>
-    /// Gets the workshop phone number (from phone field in Tecnom API).
+    /// Gets the workshop whatsapp number (from phone field in Tecnom API).
     /// </summary>
     [JsonPropertyName("phone")]
-    public string? Phone { get; init; }
+    public string? Whatsapp { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether the workshop is active.

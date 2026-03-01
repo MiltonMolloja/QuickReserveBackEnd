@@ -32,7 +32,7 @@ public static class MappingConfig
         TypeAdapterConfig<Contact, ContactResponse>
             .NewConfig()
             .Map(dest => dest.Email, src => src.Email.Value)
-            .Map(dest => dest.Phone, src => src.Phone.Value);
+            .Map(dest => dest.Whatsapp, src => src.Whatsapp.Value);
 
         // Vehicle -> VehicleResponse
         TypeAdapterConfig<Vehicle, VehicleResponse>

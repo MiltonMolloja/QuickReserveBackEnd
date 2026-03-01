@@ -34,7 +34,7 @@ public sealed class AppointmentDomainService
     /// <param name="serviceType">The service type.</param>
     /// <param name="contactName">The contact name.</param>
     /// <param name="contactEmail">The contact email.</param>
-    /// <param name="contactPhone">The contact phone.</param>
+    /// <param name="contactWhatsapp">The contact whatsapp.</param>
     /// <param name="vehicleMake">The vehicle make (optional).</param>
     /// <param name="vehicleModel">The vehicle model (optional).</param>
     /// <param name="vehicleYear">The vehicle year (optional).</param>
@@ -48,7 +48,7 @@ public sealed class AppointmentDomainService
         string serviceType,
         string contactName,
         string contactEmail,
-        string contactPhone,
+        string contactWhatsapp,
         string? vehicleMake = null,
         string? vehicleModel = null,
         int? vehicleYear = null,
@@ -70,7 +70,7 @@ public sealed class AppointmentDomainService
             serviceType,
             contactName,
             contactEmail,
-            contactPhone,
+            contactWhatsapp,
             vehicleMake,
             vehicleModel,
             vehicleYear,

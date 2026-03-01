@@ -76,7 +76,7 @@ public sealed class WorkshopsEndpointTests : IClassFixture<CustomWebApplicationF
         central.Name.Should().Be("Taller Central");
         central.Address.Should().Be("Av. Corrientes 1234");
         central.Email.Should().Be("central@test.com");
-        central.Phone.Should().Be("+5491155551234");
+        central.Whatsapp.Should().Be("+5491155551234");
     }
 
     [Fact]

@@ -60,11 +60,11 @@ public sealed class AppointmentConfiguration : IEntityTypeConfiguration<Appointm
                 .HasMaxLength(254)
                 .IsRequired();
 
-            contact.Property(c => c.Phone)
+            contact.Property(c => c.Whatsapp)
                 .HasConversion(
                     v => v.Value,
-                    v => Phone.Create(v))
-                .HasColumnName("ContactPhone")
+                    v => Whatsapp.Create(v))
+                .HasColumnName("ContactWhatsapp")
                 .HasMaxLength(20)
                 .IsRequired();
         });

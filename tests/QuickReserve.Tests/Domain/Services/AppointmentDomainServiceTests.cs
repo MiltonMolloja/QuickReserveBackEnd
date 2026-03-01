@@ -40,7 +40,7 @@ public class AppointmentDomainServiceTests
             serviceType: "Mantenimiento",
             contactName: "Juan Perez",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
 
         // Assert
         appointment.Should().NotBeNull();
@@ -68,7 +68,7 @@ public class AppointmentDomainServiceTests
             serviceType: "Mantenimiento",
             contactName: "Juan Perez",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
 
         // Assert
         await act.Should().ThrowAsync<InvalidWorkshopException>()
@@ -92,7 +92,7 @@ public class AppointmentDomainServiceTests
             serviceType: "Mantenimiento",
             contactName: "Juan Perez",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234",
+            contactWhatsapp: "+5491155551234",
             vehicleMake: "Toyota",
             vehicleModel: "Corolla",
             vehicleYear: 2022,
@@ -121,7 +121,7 @@ public class AppointmentDomainServiceTests
             serviceType: "Mantenimiento",
             contactName: "Juan Perez",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
 
         // Assert
         await act.Should().ThrowAsync<DomainException>()

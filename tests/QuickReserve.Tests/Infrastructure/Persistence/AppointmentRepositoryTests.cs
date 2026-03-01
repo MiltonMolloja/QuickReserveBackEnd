@@ -140,7 +140,7 @@ public sealed class AppointmentRepositoryTests : IDisposable
         persisted!.Contact.Should().NotBeNull();
         persisted.Contact.Name.Should().Be("Juan Perez");
         persisted.Contact.Email.Value.Should().Be("juan@example.com");
-        persisted.Contact.Phone.Value.Should().Be("+5491155551234");
+        persisted.Contact.Whatsapp.Value.Should().Be("+5491155551234");
     }
 
     [Fact]
@@ -153,7 +153,7 @@ public sealed class AppointmentRepositoryTests : IDisposable
             serviceType: "Mantenimiento",
             contactName: "Juan Perez",
             contactEmail: "juan@example.com",
-            contactPhone: "+5491155551234",
+            contactWhatsapp: "+5491155551234",
             vehicleMake: "Toyota",
             vehicleModel: "Corolla",
             vehicleYear: 2023,
@@ -201,6 +201,6 @@ public sealed class AppointmentRepositoryTests : IDisposable
             serviceType: "Mantenimiento",
             contactName: "Juan Perez",
             contactEmail: "juan@example.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
     }
 }

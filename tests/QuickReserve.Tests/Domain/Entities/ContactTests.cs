@@ -19,7 +19,7 @@ public class ContactTests
 
         contact.Name.Should().Be("Juan Perez");
         contact.Email.Value.Should().Be("juan@email.com");
-        contact.Phone.Value.Should().Be("+5491155551234");
+        contact.Whatsapp.Value.Should().Be("+5491155551234");
     }
 
     [Fact]
@@ -51,10 +51,10 @@ public class ContactTests
     }
 
     [Fact]
-    public void Create_WithInvalidPhone_ShouldThrowInvalidPhoneException()
+    public void Create_WithInvalidWhatsapp_ShouldThrowInvalidWhatsappException()
     {
         var act = () => Contact.Create("Juan", "juan@email.com", "123");
 
-        act.Should().Throw<InvalidPhoneException>();
+        act.Should().Throw<InvalidWhatsappException>();
     }
 }

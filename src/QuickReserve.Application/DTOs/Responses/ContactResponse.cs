@@ -15,5 +15,5 @@ public sealed record ContactResponse
 
     public string Email { get; init; } = string.Empty;
 
-    public string Phone { get; init; } = string.Empty;
+    public string Whatsapp { get; init; } = string.Empty;
 }

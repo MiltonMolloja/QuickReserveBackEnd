@@ -23,7 +23,7 @@ Content-Type: application/json
   "contact": {
     "name": "Juan Perez",
     "email": "juan@email.com",
-    "phone": "+5491155551234"
+    "whatsapp": "+5491155551234"
   },
   "vehicle": {
     "make": "Toyota",
@@ -44,7 +44,7 @@ Content-Type: application/json
   "contact": {
     "name": "Maria Garcia",
     "email": "maria@email.com",
-    "phone": "+5491166662222"
+    "whatsapp": "+5491166662222"
   }
 }
 
@@ -59,6 +59,6 @@ Content-Type: application/json
   "contact": {
     "name": "",
     "email": "invalid-email",
-    "phone": "123"
+    "whatsapp": "123"
   }
 }

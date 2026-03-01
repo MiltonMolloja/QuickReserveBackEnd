@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="PhoneTests.cs" company="QuickReserve">
+// <copyright file="WhatsappTests.cs" company="QuickReserve">
 //     Copyright (c) QuickReserve. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -10,17 +10,17 @@ using FluentAssertions;
 using QuickReserve.Domain.Exceptions;
 using QuickReserve.Domain.ValueObjects;
 
-public class PhoneTests
+public class WhatsappTests
 {
     [Theory]
     [InlineData("+5491155551234")]
     [InlineData("5491155551234")]
     [InlineData("+541155551234")]
-    public void Create_WithValidPhone_ShouldSucceed(string validPhone)
+    public void Create_WithValidWhatsapp_ShouldSucceed(string validWhatsapp)
     {
-        var phone = Phone.Create(validPhone);
+        var whatsapp = Whatsapp.Create(validWhatsapp);
 
-        phone.Value.Should().NotBeNullOrEmpty();
+        whatsapp.Value.Should().NotBeNullOrEmpty();
     }
 
     [Theory]
@@ -28,20 +28,20 @@ public class PhoneTests
     [InlineData("+54 (911) 5555-1234", "+5491155551234")]
     public void Create_ShouldCleanFormatting(string input, string expected)
     {
-        var phone = Phone.Create(input);
+        var whatsapp = Whatsapp.Create(input);
 
-        phone.Value.Should().Be(expected);
+        whatsapp.Value.Should().Be(expected);
     }
 
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
-    public void Create_WithEmptyPhone_ShouldThrowInvalidPhoneException(string? invalidPhone)
+    public void Create_WithEmptyWhatsapp_ShouldThrowInvalidWhatsappException(string? invalidWhatsapp)
     {
-        var act = () => Phone.Create(invalidPhone!);
+        var act = () => Whatsapp.Create(invalidWhatsapp!);
 
-        act.Should().Throw<InvalidPhoneException>()
+        act.Should().Throw<InvalidWhatsappException>()
             .WithMessage("*vacio*");
     }
 
@@ -49,20 +49,20 @@ public class PhoneTests
     [InlineData("123")]
     [InlineData("abc")]
     [InlineData("0000000")]
-    public void Create_WithInvalidFormat_ShouldThrowInvalidPhoneException(string invalidPhone)
+    public void Create_WithInvalidFormat_ShouldThrowInvalidWhatsappException(string invalidWhatsapp)
     {
-        var act = () => Phone.Create(invalidPhone);
+        var act = () => Whatsapp.Create(invalidWhatsapp);
 
-        act.Should().Throw<InvalidPhoneException>()
+        act.Should().Throw<InvalidWhatsappException>()
             .WithMessage("*formato*");
     }
 
     [Fact]
     public void Equals_WithSameValue_ShouldBeTrue()
     {
-        var phone1 = Phone.Create("+5491155551234");
-        var phone2 = Phone.Create("+54 911 5555 1234");
+        var whatsapp1 = Whatsapp.Create("+5491155551234");
+        var whatsapp2 = Whatsapp.Create("+54 911 5555 1234");
 
-        phone1.Should().Be(phone2);
+        whatsapp1.Should().Be(whatsapp2);
     }
 }

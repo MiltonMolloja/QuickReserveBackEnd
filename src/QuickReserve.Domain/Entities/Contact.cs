@@ -19,14 +19,14 @@ public sealed class Contact
     {
         Name = string.Empty;
         Email = null!;
-        Phone = null!;
+        Whatsapp = null!;
     }
 
-    private Contact(string name, Email email, Phone phone)
+    private Contact(string name, Email email, Whatsapp whatsapp)
     {
         Name = name;
         Email = email;
-        Phone = phone;
+        Whatsapp = whatsapp;
     }
 
     /// <summary>
@@ -40,25 +40,25 @@ public sealed class Contact
     public Email Email { get; private set; }
 
     /// <summary>
-    /// Gets the contact phone number.
+    /// Gets the contact whatsapp number.
     /// </summary>
-    public Phone Phone { get; private set; }
+    public Whatsapp Whatsapp { get; private set; }
 
     /// <summary>
     /// Creates a new <see cref="Contact"/> instance with validated data.
     /// </summary>
     /// <param name="name">The contact name.</param>
     /// <param name="email">The contact email address.</param>
-    /// <param name="phone">The contact phone number.</param>
+    /// <param name="whatsapp">The contact whatsapp number.</param>
     /// <returns>A new <see cref="Contact"/> instance.</returns>
     /// <exception cref="DomainException">Thrown when the name is empty.</exception>
-    public static Contact Create(string name, string email, string phone)
+    public static Contact Create(string name, string email, string whatsapp)
     {
         return string.IsNullOrWhiteSpace(name)
             ? throw new DomainException("El nombre del contacto no puede estar vacio.")
             : new Contact(
                 name.Trim(),
                 Email.Create(email),
-                Phone.Create(phone));
+                Whatsapp.Create(whatsapp));
     }
 }

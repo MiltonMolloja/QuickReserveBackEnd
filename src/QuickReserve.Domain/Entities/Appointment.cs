@@ -82,7 +82,7 @@ public sealed class Appointment
     /// <param name="serviceType">The type of service.</param>
     /// <param name="contactName">The contact name.</param>
     /// <param name="contactEmail">The contact email.</param>
-    /// <param name="contactPhone">The contact phone.</param>
+    /// <param name="contactWhatsapp">The contact whatsapp.</param>
     /// <param name="vehicleMake">The vehicle make (optional).</param>
     /// <param name="vehicleModel">The vehicle model (optional).</param>
     /// <param name="vehicleYear">The vehicle year (optional).</param>
@@ -95,7 +95,7 @@ public sealed class Appointment
         string serviceType,
         string contactName,
         string contactEmail,
-        string contactPhone,
+        string contactWhatsapp,
         string? vehicleMake = null,
         string? vehicleModel = null,
         int? vehicleYear = null,
@@ -108,7 +108,7 @@ public sealed class Appointment
             placeId,
             appointmentAt,
             ServiceType.Create(serviceType),
-            Contact.Create(contactName, contactEmail, contactPhone),
+            Contact.Create(contactName, contactEmail, contactWhatsapp),
             Vehicle.Create(vehicleMake, vehicleModel, vehicleYear, vehicleLicensePlate),
             DateTime.UtcNow);
     }

@@ -30,7 +30,7 @@ public sealed class ContactRequestValidator : AbstractValidator<ContactRequest>
             .MaximumLength(254)
             .WithMessage("El email no puede exceder 254 caracteres.");
 
-        RuleFor(x => x.Phone)
+        RuleFor(x => x.Whatsapp)
             .NotEmpty()
             .WithMessage("El telefono es requerido.")
             .Matches(@"^\+?[1-9][\d\s\-\(\)]{6,20}$")

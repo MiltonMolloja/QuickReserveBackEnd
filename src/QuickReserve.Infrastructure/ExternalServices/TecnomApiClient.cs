@@ -68,7 +68,7 @@ public sealed partial class TecnomApiClient : IWorkshopService
 
         var activeWorkshops = workshops
             .Where(w => w.Active)
-            .Select(w => new WorkshopInfo(w.Id, w.Name, ParseFormattedAddress(w.Address), w.Email, w.Phone))
+            .Select(w => new WorkshopInfo(w.Id, w.Name, ParseFormattedAddress(w.Address), w.Email, w.Whatsapp))
             .ToList();
 
         LogRetrievedWorkshops(_logger, activeWorkshops.Count);

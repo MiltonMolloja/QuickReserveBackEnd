@@ -66,7 +66,7 @@ public sealed partial class CreateAppointmentHandler
                 request.ServiceType,
                 request.Contact.Name,
                 request.Contact.Email,
-                request.Contact.Phone,
+                request.Contact.Whatsapp,
                 request.Vehicle?.Make,
                 request.Vehicle?.Model,
                 request.Vehicle?.Year,

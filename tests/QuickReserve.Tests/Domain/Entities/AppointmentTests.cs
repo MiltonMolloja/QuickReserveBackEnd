@@ -23,7 +23,7 @@ public class AppointmentTests
             serviceType: "Mantenimiento",
             contactName: "Juan Perez",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
 
         appointment.Id.Should().NotBeEmpty();
         appointment.PlaceId.Should().Be(123);
@@ -31,7 +31,7 @@ public class AppointmentTests
         appointment.ServiceType.Value.Should().Be("Mantenimiento");
         appointment.Contact.Name.Should().Be("Juan Perez");
         appointment.Contact.Email.Value.Should().Be("juan@email.com");
-        appointment.Contact.Phone.Value.Should().Be("+5491155551234");
+        appointment.Contact.Whatsapp.Value.Should().Be("+5491155551234");
         appointment.Vehicle.Should().BeNull();
         appointment.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
@@ -45,7 +45,7 @@ public class AppointmentTests
             serviceType: "Mantenimiento",
             contactName: "Juan Perez",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234",
+            contactWhatsapp: "+5491155551234",
             vehicleMake: "Toyota",
             vehicleModel: "Corolla",
             vehicleYear: 2022,
@@ -69,7 +69,7 @@ public class AppointmentTests
             serviceType: "Mantenimiento",
             contactName: "Juan Perez",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
 
         act.Should().Throw<DomainException>()
             .WithMessage("*fecha*futura*");
@@ -84,7 +84,7 @@ public class AppointmentTests
             serviceType: string.Empty,
             contactName: "Juan Perez",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
 
         act.Should().Throw<DomainException>()
             .WithMessage("*tipo de servicio*");
@@ -99,7 +99,7 @@ public class AppointmentTests
             serviceType: "Mantenimiento",
             contactName: string.Empty,
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
 
         act.Should().Throw<DomainException>()
             .WithMessage("*nombre*");
@@ -114,7 +114,7 @@ public class AppointmentTests
             serviceType: "Mantenimiento",
             contactName: "Juan",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
 
         var appointment2 = Appointment.Create(
             placeId: 123,
@@ -122,7 +122,7 @@ public class AppointmentTests
             serviceType: "Mantenimiento",
             contactName: "Juan",
             contactEmail: "juan@email.com",
-            contactPhone: "+5491155551234");
+            contactWhatsapp: "+5491155551234");
 
         appointment1.Id.Should().NotBe(appointment2.Id);
     }

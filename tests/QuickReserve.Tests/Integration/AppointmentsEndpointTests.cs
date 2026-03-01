@@ -60,7 +60,7 @@ public sealed class AppointmentsEndpointTests : IClassFixture<CustomWebApplicati
             {
                 Name = "Juan Perez",
                 Email = "juan@example.com",
-                Phone = "+5491155551234",
+                Whatsapp = "+5491155551234",
             },
             Vehicle = new VehicleRequest
             {
@@ -120,7 +120,7 @@ public sealed class AppointmentsEndpointTests : IClassFixture<CustomWebApplicati
             {
                 Name = "Maria Garcia",
                 Email = "maria@example.com",
-                Phone = "+5491166662345",
+                Whatsapp = "+5491166662345",
             },
         };
 
@@ -153,7 +153,7 @@ public sealed class AppointmentsEndpointTests : IClassFixture<CustomWebApplicati
             {
                 Name = "Test User",
                 Email = "test@example.com",
-                Phone = "+5491155551234",
+                Whatsapp = "+5491155551234",
             },
         };
 
@@ -187,7 +187,7 @@ public sealed class AppointmentsEndpointTests : IClassFixture<CustomWebApplicati
             {
                 Name = "Snake Case Test",
                 Email = "snake@example.com",
-                Phone = "+5491155551234",
+                Whatsapp = "+5491155551234",
             },
         };
 
