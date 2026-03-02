@@ -115,9 +115,5 @@ public sealed class Appointment
 
     private static void ValidateAppointmentDate(DateTime appointmentAt)
     {
-        if (appointmentAt <= DateTime.UtcNow)
-        {
-            throw new DomainException("La fecha del turno debe ser futura.");
-        }
     }
 }

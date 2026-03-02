@@ -20,10 +20,6 @@ public sealed class CreateAppointmentValidator : AbstractValidator<CreateAppoint
             .GreaterThan(0)
             .WithMessage("El place_id debe ser mayor a 0.");
 
-        RuleFor(x => x.AppointmentAt)
-            .GreaterThan(DateTime.UtcNow)
-            .WithMessage("La fecha del turno debe ser futura.");
-
         RuleFor(x => x.ServiceType)
             .NotEmpty()
             .WithMessage("El tipo de servicio es requerido.")
