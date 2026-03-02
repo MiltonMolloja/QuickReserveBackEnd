@@ -125,7 +125,7 @@ public static class AppointmentSeeder
         // Argentina is UTC-3. We want hours like 09:00 ART = 12:00 UTC.
         // Get tomorrow's date in Argentina time, then work in UTC.
         var todayArgentina = DateTime.UtcNow.AddHours(-3).Date;
-        var current = todayArgentina.AddDays(1);
+        var current = todayArgentina;
 
         while (days.Count < count)
         {
