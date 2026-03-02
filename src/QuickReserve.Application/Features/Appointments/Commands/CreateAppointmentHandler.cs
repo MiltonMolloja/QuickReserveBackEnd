@@ -76,7 +76,17 @@ public sealed partial class CreateAppointmentHandler
             // Persist
             await _appointmentRepository.AddAsync(appointment, cancellationToken);
 
-            LogAppointmentCreated(_logger, appointment.Id);
+            LogAppointmentCreated(
+                _logger,
+                appointment.Id,
+                appointment.PlaceId,
+                appointment.AppointmentAt,
+                appointment.ServiceType.Value,
+                appointment.Contact.Name,
+                appointment.Contact.Email.Value,
+                appointment.Contact.Whatsapp.Value,
+                appointment.Vehicle?.Make,
+                appointment.Vehicle?.LicensePlate?.Value);
 
             // Map to response
             var response = appointment.Adapt<AppointmentResponse>();
@@ -92,6 +102,18 @@ public sealed partial class CreateAppointmentHandler
     [LoggerMessage(Level = LogLevel.Information, Message = "Creating appointment for place {PlaceId}")]
     private static partial void LogCreatingAppointment(ILogger logger, int placeId);
 
-    [LoggerMessage(Level = LogLevel.Information, Message = "Appointment {AppointmentId} created successfully")]
-    private static partial void LogAppointmentCreated(ILogger logger, Guid appointmentId);
+    [LoggerMessage(
+        Level = LogLevel.Information,
+        Message = "Appointment {AppointmentId} created - PlaceId: {PlaceId}, Date: {AppointmentAt}, Service: {ServiceType}, Contact: {ContactName} ({ContactEmail}, {ContactWhatsapp}), Vehicle: {VehicleMake}, Plate: {LicensePlate}")]
+    private static partial void LogAppointmentCreated(
+        ILogger logger,
+        Guid appointmentId,
+        int placeId,
+        DateTime appointmentAt,
+        string serviceType,
+        string contactName,
+        string contactEmail,
+        string contactWhatsapp,
+        string? vehicleMake,
+        string? licensePlate);
 }
