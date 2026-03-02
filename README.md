@@ -2,6 +2,14 @@
 
 Sistema de reservas de turnos para talleres mecánicos - Challenge técnico Tecnom.
 
+> Technical challenge for **Tecnom** - Consumes a .NET backend API.
+
+> **Important**: The full project analysis document — is available here:
+> **[QuickReserve Backend Analysis](https://github.com/MiltonMolloja/QuickReserveBackEnd/blob/master/Dosc/QuickReserve-Backend-Plan.md)**
+> **[QuickReserve Backend_Implementacion](https://github.com/MiltonMolloja/QuickReserveBackEnd/blob/master/Dosc/QuickReserve-Backend-Implementacion.md)**
+
+---
+
 ## Arquitectura
 
 Este proyecto implementa **Clean Architecture** con **DDD** y **CQRS** usando MediatR.
