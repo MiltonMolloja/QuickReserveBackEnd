@@ -24,10 +24,8 @@ public static class AppointmentSeeder
     [
         "Mantenimiento",
         "Reparacion",
-        "Revision",
+        "Revision Tecnica",
         "Diagnostico",
-        "Service",
-        "Otro",
     ];
 
     private static readonly string[] FirstNames =
@@ -123,13 +121,18 @@ public static class AppointmentSeeder
     private static List<DateTime> GetNextBusinessDays(int count)
     {
         var days = new List<DateTime>();
-        var current = DateTime.UtcNow.Date.AddDays(1); // Start from tomorrow
+
+        // Use Argentina time (UTC-3) to calculate business days, then store as UTC
+        var argentinaOffset = TimeSpan.FromHours(-3);
+        var nowArgentina = DateTimeOffset.UtcNow.ToOffset(argentinaOffset);
+        var current = nowArgentina.Date.AddDays(1); // Start from tomorrow (Argentina date, midnight)
 
         while (days.Count < count)
         {
             if (current.DayOfWeek is not (DayOfWeek.Saturday or DayOfWeek.Sunday))
             {
-                days.Add(current);
+                // Convert Argentina midnight to UTC (add 3 hours)
+                days.Add(current.AddHours(3));
             }
 
             current = current.AddDays(1);
