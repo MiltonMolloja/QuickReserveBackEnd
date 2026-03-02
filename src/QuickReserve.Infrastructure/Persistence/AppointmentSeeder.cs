@@ -122,16 +122,16 @@ public static class AppointmentSeeder
     {
         var days = new List<DateTime>();
 
-        // Use Argentina time (UTC-3) to calculate business days, then store as UTC
-        var argentinaOffset = TimeSpan.FromHours(-3);
-        var nowArgentina = DateTimeOffset.UtcNow.ToOffset(argentinaOffset);
-        var current = nowArgentina.Date.AddDays(1); // Start from tomorrow (Argentina date, midnight)
+        // Argentina is UTC-3. We want hours like 09:00 ART = 12:00 UTC.
+        // Get tomorrow's date in Argentina time, then work in UTC.
+        var todayArgentina = DateTime.UtcNow.AddHours(-3).Date;
+        var current = todayArgentina.AddDays(1);
 
         while (days.Count < count)
         {
             if (current.DayOfWeek is not (DayOfWeek.Saturday or DayOfWeek.Sunday))
             {
-                // Convert Argentina midnight to UTC (add 3 hours)
+                // Store as UTC midnight + 3h offset (Argentina midnight = 03:00 UTC)
                 days.Add(current.AddHours(3));
             }
 
