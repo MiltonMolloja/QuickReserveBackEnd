@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using QuickReserve.API.Middleware;
 using QuickReserve.Application;
 using QuickReserve.Infrastructure;
+using QuickReserve.Infrastructure.Persistence;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -144,5 +145,11 @@ app.MapHealthChecks("/health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
 });
+
+// Seed sample data (only in Development)
+if (app.Environment.IsDevelopment())
+{
+    await AppointmentSeeder.SeedAsync(app.Services);
+}
 
 await app.RunAsync();

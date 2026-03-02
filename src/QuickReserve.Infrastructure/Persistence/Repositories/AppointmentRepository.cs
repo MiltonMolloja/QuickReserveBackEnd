@@ -30,6 +30,7 @@ public sealed class AppointmentRepository : IAppointmentRepository
     public async Task<Appointment?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.Appointments
+            .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 
@@ -37,6 +38,7 @@ public sealed class AppointmentRepository : IAppointmentRepository
     public async Task<IReadOnlyList<Appointment>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Appointments
+            .AsNoTracking()
             .OrderByDescending(a => a.CreatedAt)
             .ToListAsync(cancellationToken);
     }
