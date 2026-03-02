@@ -3035,8 +3035,8 @@ public partial class Program { }
   },
   "TecnomApi": {
     "BaseUrl": "https://dev.tecnomcrm.com/api/v1/",
-    "Username": "REDACTED_USERNAME",
-    "Password": "REDACTED_PASSWORD",
+    "Username": "<configurar en User Secrets>",
+    "Password": "<configurar en User Secrets>",
     "CacheExpirationMinutes": 5,
     "TimeoutSeconds": 30,
     "RetryCount": 3

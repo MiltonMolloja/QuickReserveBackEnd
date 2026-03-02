@@ -2,13 +2,10 @@
 
 Sistema de reservas de turnos para talleres mecánicos - Challenge técnico Tecnom.
 
-> Technical challenge for **Tecnom** - Consumes a .NET backend API.
-
-> **Important**: The full project analysis document — is available here:
-> **[QuickReserve Backend Analysis](https://github.com/MiltonMolloja/QuickReserveBackEnd/blob/master/Dosc/QuickReserve-Backend-Plan.md)**
-> **[QuickReserve Backend_Implementacion](https://github.com/MiltonMolloja/QuickReserveBackEnd/blob/master/Dosc/QuickReserve-Backend-Implementacion.md)**
-
----
+> **IMPORTANTE:** Los documentos de análisis y planificación utilizados para el desarrollo de este proyecto se encuentran en:
+>
+> - [Plan de Arquitectura y Diseño](https://github.com/MiltonMolloja/QuickReserveBackEnd/blob/master/Docs/QuickReserve-Backend-Plan.md)
+> - [Guía de Implementación (paso a paso)](https://github.com/MiltonMolloja/QuickReserveBackEnd/blob/master/Docs/QuickReserve-Backend-Implementacion.md)
 
 ## Arquitectura
 
@@ -22,7 +19,7 @@ src/
 └── QuickReserve.API/              # Controllers, Middleware, Configuration
 
 tests/
-└── QuickReserve.Tests/            # Unit & Integration Tests
+└── QuickReserve.Tests/            # Unit, Integration & Architecture Tests
 ```
 
 ## Stack Tecnológico
@@ -37,6 +34,7 @@ tests/
 - **Serilog + ELK** - Logging estructurado
 - **SonarQube** - Análisis de código
 - **xUnit + FluentAssertions** - Testing
+- **NetArchTest** - Architecture tests
 
 ## Requisitos
 
@@ -48,8 +46,8 @@ tests/
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/your-username/quickreserve-backend.git
-cd quickreserve-backend
+git clone https://github.com/MiltonMolloja/QuickReserveBackEnd.git
+cd QuickReserveBackEnd
 ```
 
 ### 2. Levantar servicios con Docker
@@ -65,7 +63,16 @@ Esto levanta:
 - **Kibana** - localhost:5601
 - **SonarQube** - localhost:9000
 
-### 3. Ejecutar la API
+### 3. Configurar credenciales (User Secrets)
+
+```bash
+cd src/QuickReserve.API
+dotnet user-secrets set "TecnomApi:Username" "<tu_usuario>"
+dotnet user-secrets set "TecnomApi:Password" "<tu_password>"
+dotnet user-secrets set "ConnectionStrings:Redis" "localhost:6379"
+```
+
+### 4. Ejecutar la API
 
 ```bash
 dotnet run --project src/QuickReserve.API
@@ -73,25 +80,31 @@ dotnet run --project src/QuickReserve.API
 
 La API estará disponible en:
 - HTTP: http://localhost:5000
-- HTTPS: https://localhost:5001
 - Swagger: http://localhost:5000/swagger
 
-### 4. Ejecutar Tests
+> Al iniciar en modo Development, se precargan **80 turnos de ejemplo** (4 turnos/día x 5 días hábiles x 4 talleres).
+
+### 5. Ejecutar Tests
 
 ```bash
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-## Endpoints Principales
+## Endpoints
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | `/api/workshops` | Lista talleres disponibles |
-| GET | `/api/workshops/{id}/availability` | Disponibilidad de un taller |
-| POST | `/api/appointments` | Crear reserva |
-| GET | `/api/appointments/{id}` | Obtener reserva |
-| DELETE | `/api/appointments/{id}` | Cancelar reserva |
+| GET | `/api/workshops` | Lista talleres activos (desde Tecnom CRM) |
+| GET | `/api/appointments` | Lista todas las reservas |
+| POST | `/api/appointments` | Crear una nueva reserva |
 | GET | `/health` | Health check |
+
+## Reglas de Negocio
+
+- Los turnos solo pueden agendarse en horarios fijos: **09:00, 10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00** (hora Argentina, UTC-3)
+- Solo se atiende de **lunes a viernes** (sábado y domingo no hay turnos)
+- Un taller solo puede atender **un turno a la vez**
+- Solo se pueden crear turnos en talleres **activos** (validado contra la API de Tecnom CRM)
 
 ## Análisis de Código con SonarQube
 
@@ -120,10 +133,10 @@ dotnet sonarscanner end /d:sonar.token="YOUR_TOKEN"
 | Variable | Descripción | Default |
 |----------|-------------|---------|
 | `ASPNETCORE_ENVIRONMENT` | Entorno de ejecución | Development |
-| `ConnectionStrings__Redis` | Connection string Redis | localhost:6379 |
-| `ExternalApi__BaseUrl` | URL API externa talleres | https://dev.tecnomcrm.com |
-| `ExternalApi__Username` | Usuario API externa | - |
-| `ExternalApi__Password` | Password API externa | - |
+| `ConnectionStrings__Redis` | Connection string Redis | (User Secrets) |
+| `TecnomApi__BaseUrl` | URL API externa talleres | https://dev.tecnomcrm.com/api/v1/ |
+| `TecnomApi__Username` | Usuario API externa | (User Secrets) |
+| `TecnomApi__Password` | Password API externa | (User Secrets) |
 
 ## Estructura de Carpetas
 
@@ -133,46 +146,53 @@ QuickReserveBackEnd/
 │   ├── QuickReserve.Domain/
 │   │   ├── Entities/
 │   │   ├── ValueObjects/
-│   │   ├── Events/
 │   │   ├── Exceptions/
-│   │   └── Interfaces/
+│   │   ├── Interfaces/
+│   │   └── Services/
 │   ├── QuickReserve.Application/
 │   │   ├── Common/
-│   │   │   ├── Behaviors/
-│   │   │   ├── Interfaces/
-│   │   │   └── Models/
-│   │   └── Features/
-│   │       ├── Workshops/
-│   │       └── Appointments/
+│   │   │   └── Behaviors/       # Logging, Validation pipelines
+│   │   ├── DTOs/
+│   │   │   ├── Requests/
+│   │   │   └── Responses/
+│   │   ├── Features/
+│   │   │   ├── Workshops/
+│   │   │   └── Appointments/
+│   │   ├── Mappings/
+│   │   └── Validators/
 │   ├── QuickReserve.Infrastructure/
 │   │   ├── Persistence/
-│   │   ├── Caching/
-│   │   └── ExternalServices/
+│   │   │   ├── Configurations/
+│   │   │   └── Repositories/
+│   │   ├── ExternalServices/
+│   │   │   └── Models/
+│   │   └── Configuration/
 │   └── QuickReserve.API/
 │       ├── Controllers/
-│       ├── Middleware/
-│       └── Filters/
+│       └── Middleware/
 ├── tests/
 │   └── QuickReserve.Tests/
 │       ├── Domain/
 │       ├── Application/
+│       ├── Architecture/
 │       ├── Infrastructure/
-│       └── API/
+│       └── Integration/
+├── Docs/                          # Documentación de análisis y planificación
 ├── docker/
+│   ├── Dockerfile
 │   └── docker-compose.yml
 ├── .github/
 │   └── workflows/
 ├── Directory.Build.props
 ├── .editorconfig
-├── sonar-project.properties
 └── QuickReserve.sln
 ```
 
 ## Convenciones
 
 - **Commits**: [Conventional Commits](https://www.conventionalcommits.org/)
-- **Branching**: GitFlow
 - **Code Style**: Configurado en `.editorconfig` y StyleCop
+- **Architecture**: Clean Architecture con CQRS (MediatR)
 
 ## Licencia
 
