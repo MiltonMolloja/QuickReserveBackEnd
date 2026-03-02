@@ -22,14 +22,12 @@ public static class AppointmentSeeder
 
     private static readonly string[] ServiceTypes =
     [
-        "Cambio de aceite",
-        "Alineación y balanceo",
-        "Cambio de frenos",
-        "Diagnóstico general",
-        "Service mayor",
-        "Cambio de filtros",
-        "Cambio de correa",
-        "Revisión pre-VTV",
+        "Mantenimiento",
+        "Reparacion",
+        "Revision",
+        "Diagnostico",
+        "Service",
+        "Otro",
     ];
 
     private static readonly string[] FirstNames =
