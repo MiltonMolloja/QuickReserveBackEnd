@@ -33,7 +33,7 @@ USER root
 RUN apt-get update && apt-get install -y --no-install-recommends wget && rm -rf /var/lib/apt/lists/*
 
 # Security: run as non-root user
-RUN adduser --disabled-password --gecos "" appuser
+RUN useradd --no-create-home --shell /bin/false appuser
 USER appuser
 
 ENV ASPNETCORE_ENVIRONMENT=Production
