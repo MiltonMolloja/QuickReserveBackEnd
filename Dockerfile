@@ -43,7 +43,7 @@ EXPOSE 8080
 
 COPY --from=build /app/publish .
 
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=15s \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=30s \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/appointments || exit 1
 
 ENTRYPOINT ["dotnet", "QuickReserve.API.dll"]
