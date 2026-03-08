@@ -74,11 +74,14 @@ builder.Services.AddSwaggerGen(options =>
     }
 });
 
-// CORS for Angular frontend
+// CORS for Angular frontend (configurable via environment variable)
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? ["http://localhost:4200", "https://localhost:4200"];
+
 builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngular", policy =>
         policy
-            .WithOrigins("http://localhost:4200", "https://localhost:4200")
+            .WithOrigins(allowedOrigins)
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()));
@@ -122,15 +125,13 @@ app.UseSerilogRequestLogging(options =>
         diagnosticContext.Set("UserAgent", httpContext.Request.Headers.UserAgent.ToString());
     });
 
-if (app.Environment.IsDevelopment())
+// Swagger enabled in all environments (challenge demo)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuickReserve API v1");
-        c.RoutePrefix = "swagger";
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuickReserve API v1");
+    c.RoutePrefix = "swagger";
+});
 
 if (!app.Environment.IsDevelopment())
 {
