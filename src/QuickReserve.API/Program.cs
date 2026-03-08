@@ -147,10 +147,7 @@ app.MapHealthChecks("/health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
 });
 
-// Seed sample data (only in Development)
-if (app.Environment.IsDevelopment())
-{
-    await AppointmentSeeder.SeedAsync(app.Services);
-}
+// Seed sample data (in-memory DB requires seeding on every startup)
+await AppointmentSeeder.SeedAsync(app.Services);
 
 await app.RunAsync();
